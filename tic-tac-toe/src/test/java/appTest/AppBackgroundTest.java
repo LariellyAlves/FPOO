@@ -13,7 +13,12 @@ public class AppBackgroundTest {
 	
 	static ImageIcon loadImage(String pathWithFileName) {
 		URL url = AppBackgroundTest.class.getResource(pathWithFileName);
-		return null;
+		if (url != null) {
+            return new ImageIcon(url);
+        } else {
+            System.err.println("Imagem não encontrada: " + pathWithFileName);
+            return null;
+        }
 	}
 	
 	public static void main(String[] args) {
@@ -22,7 +27,7 @@ public class AppBackgroundTest {
 		
 		MainWindow window = new MainWindow();
 		
-		ImageIcon icon = loadImage(path + "backgroubd.jpg");
+		ImageIcon icon = loadImage(path + "background.jpg");
 		window.setBackground(icon);
 		
 		

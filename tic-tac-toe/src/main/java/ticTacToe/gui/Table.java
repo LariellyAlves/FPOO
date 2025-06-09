@@ -9,9 +9,6 @@ import javax.swing.ImageIcon;
 import ticTacToe.component.AbstractComponent;
 
 public class Table extends AbstractComponent{
-
-	private Point      position;
-	private Dimension  dimension;
 	private ImageIcon  icon;
 	
 	

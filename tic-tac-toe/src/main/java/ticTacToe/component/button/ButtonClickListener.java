@@ -1,5 +1,7 @@
 package ticTacToe.component.button;
 
-public class ButtonClickListener {
+@FunctionalInterface
+public interface ButtonClickListener {
 
+	void onClick(ButtonClickEvent event);
 }

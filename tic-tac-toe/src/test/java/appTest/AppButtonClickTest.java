@@ -1,12 +1,11 @@
 package appTest;
 
 import ticTacToe.component.button.Button;
-import ticTacToe.component.button.Button.ButtonClickListener;
 import ticTacToe.gui.MainWindow;
 
 public class AppButtonClickTest {
 
-	private static ButtonClickListener event;
+
 
 	public static void main(String[] args) {
 		
