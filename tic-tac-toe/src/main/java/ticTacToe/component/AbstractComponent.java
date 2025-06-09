@@ -45,7 +45,7 @@ public abstract class AbstractComponent implements Paintable {
 	}
 	
 	
-	private Point getPosition() {
+	public Point getPosition() {
 		return (Point) this.position.clone();
 		
 	}
@@ -56,7 +56,7 @@ public abstract class AbstractComponent implements Paintable {
 	}
 	
 	
-	private Dimension getSize() {
+	public Dimension getSize() {
 		return (Dimension) this.dimension.clone();
 		
 	}
@@ -97,9 +97,7 @@ public abstract class AbstractComponent implements Paintable {
 			public void mouseClicked(MouseEvent me) {
 				
 				if( !isOver(me.getPoint() ))
-					return;
-				
-				System.out.println("oieeee!");
+					onMouseClick(me);
 			}
 		};
 		
@@ -126,6 +124,11 @@ public abstract class AbstractComponent implements Paintable {
 				}
 	
 		};
+	}
+	
+	
+	protected void onMouseClick(MouseEvent me) {
+		//the standard behavior is to do nothing 		
 	}
 
 }
