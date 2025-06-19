@@ -7,60 +7,53 @@ import java.awt.Image;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class ImageButton extends Button {
 	
-	protected Image image;
+	protected ImageIcon icon = null;
 
     public ImageButton() {
         super();
     }
 
-    public ImageButton(int x, int y) {
-        super(x, y);
+    public ImageButton(int x, int y, int width, int height, ImageIcon icon) {
+        super(x, y, width, height);
+        this.icon = icon;
     }
 
-    public ImageButton(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public ImageButton(int x, int y, ImageIcon icon) {
+        super(x, y, icon.getIconWidth(), icon.getIconHeight());
+        this.icon = icon;
     }
 	
-    
-    public void setImage(String imagePath) {
-    	
-    	try {
-    		this.image = ImageIO.read(new File(imagePath));
-    	} catch (Exception e) {
-    		System.out.println("Erro: "+ e.getMessage());
-    	}
-    }
-    
+	public void setImage(ImageIcon icon) {
+		this.icon = icon;
+		
+		}
+	
+	
+		public ImageIcon getImage() {
+			
+		return this.icon;
+		}
+		
+		
+		private void drawImage(Graphics2D g2D) {
+			
+		g2D.drawImage(icon.getImage(),
+		              position.x, position.y,
+		              width(), height(), null);
+	}
+    		
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
-
-        Graphics2D g2D = (Graphics2D) g;
-
-        g2D.setColor(Color.WHITE);
-        g2D.fillRect(position.x, position.y, dimension.width, dimension.height);
-
-        if (image != null) {
-            int imgWidth = image.getWidth(null);
-            int imgHeight = image.getHeight(null);
-
-            float scaleX = (float) dimension.width / imgWidth;
-            float scaleY = (float) dimension.height / imgHeight;
-            float scale = Math.min(scaleX, scaleY);
-
-            int drawWidth = (int) (imgWidth * scale);
-            int drawHeight = (int) (imgHeight * scale);
-
-            int drawX = position.x + (dimension.width - drawWidth) / 2;
-            int drawY = position.y + (dimension.height - drawHeight) / 2;
-
-            g2D.drawImage(image, drawX, drawY, drawWidth, drawHeight, null);
-        } else {
-            g2D.setColor(Color.RED);
-            g2D.drawString("No Image", position.x + 5, position.y + 15);
-        }
+    	
+    	if(icon != null)
+    	drawImage((Graphics2D)g);
+    	
+    	if(mouseOver)
+    	super.doMouseOverDecoration(g);
+    	
     }
 }
