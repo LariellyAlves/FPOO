@@ -39,9 +39,8 @@ public class AppTicTacToe {
     }
 
 	private void createGameControl(){
-		
 		VirtualPlayer virtualPLayer = new SimpleVirtualPlayer(tableModel, Mark.O);
-		 gameControl = new GameControl(tableModel, scoreModel, virtualPLayer);
+		gameControl = new GameControl(tableModel, scoreModel, virtualPLayer);
 	}
 	
 	private void createMainWindow()
@@ -62,7 +61,6 @@ public class AppTicTacToe {
 
 		icon = loadImage("markO.png");
 		tableView.setIconO(icon);
-
 		
 		tableView.addCellClickListener(gameControl.cellClickListener());
 		mainWindow.add(tableView);
@@ -72,7 +70,7 @@ public class AppTicTacToe {
 
 	private void createScoreView()
 	{	
-		ImageIcon icon = loadImage("scoreBackground.png");
+		ImageIcon icon = loadImage("Score.png");
 		scoreView = new ScoreView(300, 50, 100, 100, scoreModel);
 		scoreView.setBackground(icon);
 		mainWindow.add(scoreView);
@@ -101,4 +99,3 @@ public class AppTicTacToe {
 	   AppTicTacToe app = new AppTicTacToe();
     }
 }
-

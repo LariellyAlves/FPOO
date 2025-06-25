@@ -44,108 +44,98 @@ public class GameControl {
 	
 	
 	private void doVirtualPlay() {
-		
 		virtualPlayer.play();
-		verifyGameOver();
-		
-		}
+		verifyGameOver();	
+	}
 	
-		private void doUserPlay(int lin, int col) {
-			
+	private void doUserPlay(int lin, int col) {
+		
 		tableModel.setMark(lin, col, userMark);
 		verifyGameOver();
-		
+	
 		if(!gameOver)
 			doVirtualPlay();
-		}
+	}
 		
+	private void verifyGameOver() {
 		
-		private void verifyGameOver() {
-			
-			verifyWinnerAtLines();
-			verifyWinnerAtLines();
-			verifyWinnerAtLines();
-			verifyWinnerAtLines();
-				if(gameOverWithNoWinner())
-					setGameOver(Mark.BLANK);
-			}
+		verifyWinnerAtLines();
+		verifyWinnerAtFirstDiagonal();
+		verifyWinnerAtSecondDiagonal();
+		verifyWinnerAtColumns();
+		if(gameOverWithNoWinner())
+			setGameOver(Mark.BLANK);
+	}
+	
+	private boolean gameOverWithNoWinner() {
 		
-		
-		
-		private boolean gameOverWithNoWinner() {
-			
-			for(int lin=0; lin<3; lin++) {
-				for(int col=0; col<3; col++) {
-					if(tableModel.getMark(lin, col) == Mark.BLANK)
-						return false;
-					}
+		for(int lin=0; lin<3; lin++) {
+			for(int col=0; col<3; col++) {
+				if(tableModel.getMark(lin, col) == Mark.BLANK)
+					return false;
 				}
-				return true;
-		}
-		
-		
-		
-
-		private Mark getMark(int lin, int col) {
-			
-			return tableModel.getMark(lin, col);
-			
 			}
+		return true;
+	}
+	
+	private Mark getMark(int lin, int col) {
+		return tableModel.getMark(lin, col);
+	}
+	
 		
+	private boolean haveWinner(Mark markA, Mark markB, Mark markC) {
+		return ((markA != null) && (markA != Mark.BLANK) &&
+				(markA == markB) && (markA == markC));
+	}
 		
-		private boolean haveWinner(Mark markA, Mark markB, Mark markC) {
+	private void verifyWinnerAtFirstDiagonal() {
+		if (haveWinner(getMark(0,0), getMark(1,1), getMark(2,2)))
+			setGameOver(getMark(0,0));
+	}
 			
-			return ((markA != null) && (markA != Mark.BLANK) &&
-					(markA == markB) && (markA == markC));
-			}
+	private void verifyWinnerAtSecondDiagonal() {
+		if(haveWinner(getMark(0, 2), getMark(1, 1), getMark(2, 0)))
+			setGameOver(getMark(1,1));
+	}
 		
-		
-			private void verifyWinnerAtFirstDiagonal() {
-				
-				if (haveWinner(getMark(0,0), getMark(1,1), getMark(2,2)))
-					setGameOver(getMark(0,0));
-			}
-			
-			
-			private void verifyWinnerAtSecondDiagonal() {
-				if(haveWinner(getMark(0, 2), getMark(1, 1), getMark(2, 0)))
-					setGameOver(getMark(1,1));
-			}
-			
-			
-		
-			private void verifyWinnerAtLines() {
-				
-				for(int lin=0; lin<3; lin++)
-					if(haveWinner(getMark(lin, 0), getMark(lin, 1), getMark(lin, 2)))
-						setGameOver(getMark(lin,0));
-				}
-			
-			
-			
-				private void verifyWinnerAtColumns() {
-					
-				for(int col=0; col<3; col++)
-					if(haveWinner(getMark(0, col), getMark(1, col), getMark(2, col)))
-						setGameOver(getMark(0,col));
-				}
+	private void verifyWinnerAtLines() {
+		for(int lin=0; lin<3; lin++)
+			if(haveWinner(getMark(lin, 0), getMark(lin, 1), getMark(lin, 2)))
+				setGameOver(getMark(lin,0));
+	}
+	
+	private void verifyWinnerAtColumns() {
+		for(int col=0; col<3; col++)
+			if(haveWinner(getMark(0, col), getMark(1, col), getMark(2, col)))
+				setGameOver(getMark(0,col));
+	}
 
 
-		//--Listening to user plays------------
-		private void setGameOver(Mark winner) {
+	//--Listening to user plays------------
+	private void setGameOver(Mark winner) {
 		
-			
 		this.winner = winner;
+	
 		this.gameOver = true;
-		
+	
 		if(winner == Mark.O)
 			this.scoreModel.incScoreO();
-		
+	
 		if(winner == Mark.X)
 			this.scoreModel.incScoreX();
-		}
+		
+		 if (virtualPlayer instanceof LearningVirtualPlayer) {
+		        LearningVirtualPlayer learner = (LearningVirtualPlayer) virtualPlayer;
 
-
+		        if (winner == Mark.O) {
+		            learner.trainAtGameEnd(1.0); 
+		        } else if (winner == Mark.X) {
+		            learner.trainAtGameEnd(-1.0); 
+		        } else {
+		            learner.trainAtGameEnd(0.0); 
+		        }
+		    }
+	}
 
 	//--Listening to new game button------------------
 	public ButtonClickListener newGameButtonClickListener() {
@@ -157,7 +147,6 @@ public class GameControl {
 		gameOver = false;
 		if(winner != userMark)
 			virtualPlayer.play();
-		
 			}
 		};
 	}
